@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
+  "homepage": "http://rem029.github.io/WhatToDo",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.29",
     "@fortawesome/free-solid-svg-icons": "5.13.1",
