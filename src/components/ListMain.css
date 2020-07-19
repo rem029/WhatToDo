@@ -1,0 +1,95 @@
+.list-all {
+  border: 2px solid #00b894;
+  margin: 80px auto;
+  height: auto;
+  padding-top: 0;
+  overflow: hidden;
+  border-radius: 25px;
+  box-shadow: 0px 10px 11px -4px #dfe6e9;
+  transition: all 1s linear;
+  background-color: white;
+  max-width: 80%;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+.list-all-title {
+  margin: 0;
+  padding: 5px 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  transition: all 0.1 linear;
+}
+
+.title {
+  margin: 0;
+  color: #00b894;
+  font-family: "Muli";
+  font-weight: 400;
+}
+
+.list-all-disabled {
+  opacity: 50;
+  pointer-events: none;
+}
+
+.list-all-add-task {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: transparent;
+  transition: all 0.1 linear;
+}
+
+.list-all-add-task > button {
+  text-align: left;
+  color: white;
+  font-family: "Muli";
+  font-weight: 800;
+  font-size: 1.5em;
+  outline: none;
+
+  width: 100%;
+  height: 100%;
+  background-color: #00b894;
+  border: 0 none transparent;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  transition: all 0.1s linear;
+}
+
+.list-all-add-task > button:hover {
+  text-decoration: underline;
+  background-color: #dfe6e9;
+  color: #00b894;
+}
+
+/* smaller screens */
+@media only screen and (max-width: 900px) {
+  .list-all {
+    max-width: 99%;
+    margin: 60px auto;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+
+  .list-all-add-task > button {
+    font-size: 18px;
+    padding-left: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
