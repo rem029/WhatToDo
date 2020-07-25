@@ -1,99 +1,138 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../assests/css/fonts/fonts.css";
 import "./ListMain.css";
 
 import List from "./List";
 import ListNew from "./ListNew";
+import CustomSpinner from "./CustomSpinner";
 
 export default function ListMain(props) {
-  const [tasks, setTasks] = useState(props.taskList.tasks);
+	const [tasks, setTasks] = useState(props.taskList.tasks);
+	const [isLoaded, setIsLoaded] = useState(true);
+	const [addNew, setAddNew] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [addNew, setAddNew] = useState(false);
-  //Add new task
-  const CreateNewTask = task => {
-    setIsLoading(true);
-    let copyTasks = tasks;
-    copyTasks.concat(task);
+	const fetchURL =
+		"https://protected-beyond-39550.herokuapp.com/api/tasklists/task/0/0";
 
-    setTasks(tasks.concat(task));
-    props.syncListbyTLID(props.taskList.id, copyTasks);
+	// const fetchURL = "http://localhost:5000/api/tasklists/task/0/0";
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 200);
-  };
-  //Update task
-  const UpdateTask = taskUpdated => {
-    setIsLoading(true);
+	//Add new task
+	const CreateNewTask = (task) => {
+		setIsLoaded(false);
 
-    //Copy array to temporary
-    let copyTasks = tasks;
-    //Update temporary array
-    copyTasks[taskUpdated.id] = taskUpdated;
+		const fetchOption = {
+			method: "PUT",
+			headers: { "Content-type": "application/json" },
+			body: JSON.stringify({
+				title: task.title,
+				description: task.description,
+				setTime: task.setTime,
+				time: task.time,
+				isDone: task.isDone,
+			}),
+		};
+		fetch(fetchURL, fetchOption)
+			.then((res) => res.json())
+			.then((result) => {
+				setTasks(result.tasks);
+			});
+		setIsLoaded(true);
+	};
 
-    setTasks(copyTasks);
-    props.syncListbyTLID(props.taskList.id, copyTasks);
+	//Update task
+	const UpdateTask = (taskUpdated) => {
+		setIsLoaded(false);
+		console.log("UPDATE TASK");
+		console.log(taskUpdated);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 200);
-  };
-  //Delete task
-  const DeleteTask = task => {
-    setIsLoading(true);
+		const fetchOption = {
+			method: "POST",
+			headers: { "Content-type": "application/json" },
+			body: JSON.stringify({
+				_id: taskUpdated._id,
+				title: taskUpdated.title,
+				description: taskUpdated.description,
+				setTime: taskUpdated.setTime,
+				time: taskUpdated.time,
+				isDone: taskUpdated.isDone,
+			}),
+		};
+		fetch(fetchURL, fetchOption)
+			.then((res) => res.json())
+			.then((result) => {
+				setTasks(result.tasks);
+			});
 
-    //Copy to array to temporary
-    let copyTasks = tasks.filter(arr => arr.id !== task.id);
+		setIsLoaded(true);
+	};
+	//Delete task
+	const DeleteTask = (task) => {
+		setIsLoaded(false);
+		console.log(task);
+		const fetchOption = {
+			method: "DELETE",
+			headers: { "Content-type": "application/json" },
+			body: JSON.stringify({
+				_id: task._id,
+			}),
+		};
+		fetch(fetchURL, fetchOption)
+			.then((res) => res.json())
+			.then((result) => {
+				setTasks(result.tasks);
+			});
+		setIsLoaded(true);
+	};
 
-    setTasks(copyTasks);
-    props.syncListbyTLID(props.taskList.id, copyTasks);
+	const CloseAddNew = () => {
+		setAddNew(false);
+	};
 
-    setIsLoading(false);
-  };
-
-  const CloseAddNew = () => {
-    setAddNew(false);
-  };
-
-  return (
-    <div>
-      {addNew && (
-        <ListNew
-          addNewTask={CreateNewTask}
-          closeWindow={CloseAddNew}
-          newID={tasks.length + 1}
-        />
-      )}
-      <div className={isLoading ? "list-all list-all-disabled" : "list-all"}>
-        <div className="list-all-title">
-          <h2 className="title">{props.taskList.title}</h2>
-        </div>
-        {tasks.map((task, index) => {
-          return (
-            <List
-              id={task.id}
-              key={task.id}
-              task={task}
-              deleteTask={DeleteTask}
-              updateTask={UpdateTask}
-              testFunc={props.tempFunc}
-              delay={index * 50}
-            />
-          );
-        })}
-        <div className="list-all-add-task">
-          <button
-            onClick={e => {
-              e.preventDefault();
-              setAddNew(true);
-            }}
-          >
-            + ADD TASK
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div>
+			{addNew && (
+				<ListNew
+					addNewTask={CreateNewTask}
+					closeWindow={CloseAddNew}
+					newID={tasks.length + 1}
+				/>
+			)}
+			<div className={isLoaded ? "list-all" : "list-all list-all-disabled"}>
+				{isLoaded ? (
+					<div>
+						<div className="list-all-title">
+							<h2 className="title">{props.taskList.title}</h2>
+						</div>
+						{tasks.map((task, index) => {
+							return (
+								<List
+									id={task._id}
+									key={task._id}
+									task={task}
+									deleteTask={DeleteTask}
+									updateTask={UpdateTask}
+									testFunc={props.tempFunc}
+								/>
+							);
+						})}
+						<div className="list-all-add-task">
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									setAddNew(true);
+								}}
+							>
+								+ ADD TASK
+							</button>
+						</div>
+					</div>
+				) : (
+					<h2 className="list-all-loading-pos">
+						<CustomSpinner />
+					</h2>
+				)}
+			</div>
+		</div>
+	);
 }

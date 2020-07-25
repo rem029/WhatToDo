@@ -1,8 +1,14 @@
 body {
-  font-family: "Muli", sans-serif;
-  display: inline-flexbox;
-  justify-content: center;
-  max-width: 95%;
-  margin: 0 auto;
-  background-color: white;
+	font-family: "Muli", sans-serif;
+	display: inline-flexbox;
+	justify-content: center;
+	max-width: 95%;
+	margin: 0 auto;
+	background-color: white;
+}
+
+.loading-pos {
+	margin-top: 120px;
+	display: flex;
+	justify-content: center;
 }
