@@ -13,11 +13,11 @@ export default function CustomSpinner(props) {
 
     setTimeout(() => {
       setMsgDisplay("Nearly there...");
-    }, 1000);
+    }, 2000);
 
     setTimeout(() => {
       setMsgDisplay("Hold on...");
-    }, 1000);
+    }, 3000);
   }, []);
 
   return (
